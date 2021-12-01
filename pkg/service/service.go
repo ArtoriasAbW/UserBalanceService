@@ -7,6 +7,7 @@ import (
 
 type Balance interface {
 	GetUser(user balance.User) (balance.User, error)
+	IncreaseBalance(operation balance.Operation) (uint64, error)
 }
 
 type Service struct {

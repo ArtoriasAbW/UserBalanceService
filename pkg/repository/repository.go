@@ -6,8 +6,8 @@ import (
 )
 
 type Balance interface {
-	GetUser(user balance.User) (balance.User, error)
-
+	GetUser(userId uint64) (balance.User, error)
+	ModifyUser(user balance.User) (uint64, error)
 }
 
 type Repository struct {

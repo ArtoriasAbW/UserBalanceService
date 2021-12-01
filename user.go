@@ -1,6 +1,6 @@
 package balance
 
 type User struct {
-	Id      int `json:"id" uri:"id" binding:"required"`
-	Balance int `json:"balance"`
+	Id      uint64 `json:"id" uri:"id" binding:"required"`
+	Balance uint32 `json:"balance"`
 }
