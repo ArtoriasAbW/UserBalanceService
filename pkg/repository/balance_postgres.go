@@ -10,7 +10,6 @@ type BalancePostgres struct {
 	db *sqlx.DB
 }
 
-
 func NewBalancePostgres(db *sqlx.DB) *BalancePostgres {
 	return &BalancePostgres{db: db}
 }
@@ -30,6 +29,15 @@ func (r *BalancePostgres) ModifyUser(user balance.User) (uint64, error) {
 	var userId uint64
 	query := fmt.Sprintf("update %s set balance=$1 where id=$2 returning id", userTable)
 	row := r.db.QueryRow(query, user.Balance, user.Id)
+	if err := row.Scan(&userId); err != nil {
+		return 0, err
+	}
+	return userId, nil
+}
+
+func (r *BalancePostgres) CreateUser(userId uint64) (uint64, error) {
+	query := fmt.Sprintf("insert into %s (id, balance) values ($1, $2) returning id", userTable)
+	row := r.db.QueryRow(query, userId, 0)
 	if err := row.Scan(&userId); err != nil {
 		return 0, err
 	}

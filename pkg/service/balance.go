@@ -14,14 +14,21 @@ func NewBalanceService(repo repository.Balance)  *BalanceService {
 	return &BalanceService{repo: repo}
 }
 
-func (s *BalanceService) GetUser(user balance.User)  (balance.User, error){
+func (s *BalanceService) GetUser(user balance.User)  (balance.User, error) {
 	return s.repo.GetUser(user.Id)
 }
 
 func (s *BalanceService) IncreaseBalance(operation balance.Operation) (uint64, error) {
 	user, err := s.repo.GetUser(operation.UserId)
 	if err != nil {
-		return 0, errors.New("no such user")
+		userId, err := s.repo.CreateUser(operation.UserId)
+		if err != nil {
+			return 0, err
+		}
+		user = balance.User{
+			Id: userId,
+			Balance: 0,
+		}
 	}
 	user.Balance += operation.Value
 	return s.repo.ModifyUser(user)
@@ -46,7 +53,14 @@ func (s *BalanceService) MakeTransfer(operation balance.TransferOperation) (uint
 		return 0, 0, errors.New("no such sender")
 	}
 	if receiverErr != nil {
-		return 0, 0, errors.New("no such receiver")
+		receiverId, err := s.repo.CreateUser(operation.ReceiverId)
+		if err != nil {
+			return 0, 0, err
+		}
+		receiver = balance.User{
+			Id: receiverId,
+			Balance: 0,
+		}
 	}
 	if sender.Balance < operation.Value {
 		return 0, 0, errors.New("sender doesn't have enough money")

@@ -1,6 +1,6 @@
 
 CREATE TABLE users
 (
-    id serial not null unique,
+    id bigint primary key,
     balance integer default 0
 );
