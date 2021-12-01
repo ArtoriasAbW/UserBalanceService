@@ -1,0 +1,27 @@
+services:
+  database:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=balance_service
+    volumes:
+      - ./schema/000001_init.up.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  balance-service:
+    build: ./
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      database:
+        condition: service_healthy

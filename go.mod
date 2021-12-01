@@ -2,6 +2,7 @@ module UserBalanceService
 
 go 1.17
 
+
 require (
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
