@@ -1,9 +1,12 @@
 package service
 
-import "UserBalanceService/pkg/repository"
+import (
+	balance "UserBalanceService"
+	"UserBalanceService/pkg/repository"
+)
 
 type Balance interface {
-
+	GetUser(user balance.User) (balance.User, error)
 }
 
 type Service struct {
@@ -11,5 +14,7 @@ type Service struct {
 }
 
 func NewService(repos *repository.Repository) *Service {
-	return &Service{}
+	return &Service{
+		Balance: NewBalanceService(repos.Balance),
+	}
 }
