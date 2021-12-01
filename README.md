@@ -27,7 +27,7 @@ curl --location --request POST 'localhost:8000/balance-service/debit' \
 ```
 #### Получение баланса
 ```
-curl --location --request GET 'localhost:8000/balance-service/balance/1' \
+curl --location --request GET 'localhost:8000/balance-service/balance/3' \
 --data-raw ''
 ```
 #### Перевод
@@ -35,8 +35,11 @@ curl --location --request GET 'localhost:8000/balance-service/balance/1' \
 curl --location --request POST 'localhost:8000/balance-service/transfer' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-"sender_id": 1,
-"receiver_id": 2,
+"sender_id": 3,
+"receiver_id": 1,
 "value": 500
 }'
 ```
+
+##### Примечание
+Создание баланса пользователя происходит при пополнение счета или переводе на счет
