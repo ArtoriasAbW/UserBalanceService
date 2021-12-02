@@ -27,7 +27,7 @@ curl --location --request POST 'localhost:8000/balance-service/debit' \
 ```
 #### Получение баланса
 ```
-curl --location --request GET 'localhost:8000/balance-service/balance/3' \
+curl --location --request GET 'localhost:8000/balance-service/balance/3?currency=EUR' \
 --data-raw ''
 ```
 #### Перевод
