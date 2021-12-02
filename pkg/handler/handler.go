@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Handler struct {
+type  Handler struct {
 	services *service.Service
 }
 
