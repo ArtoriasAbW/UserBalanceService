@@ -65,6 +65,8 @@ func (h *Handler) balance(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
+	query := c.Request.URL.Query()
+	input.Currency = query.Get("currency")
 	user, err := h.services.Balance.GetUser(input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())

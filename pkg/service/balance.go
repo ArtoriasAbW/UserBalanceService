@@ -4,6 +4,7 @@ import (
 	balance "UserBalanceService"
 	"UserBalanceService/pkg/repository"
 	"errors"
+	"math"
 )
 
 type BalanceService struct {
@@ -15,7 +16,19 @@ func NewBalanceService(repo repository.Balance)  *BalanceService {
 }
 
 func (s *BalanceService) GetUser(user balance.User)  (balance.User, error) {
-	return s.repo.GetUser(user.Id)
+	rUser, err := s.repo.GetUser(user.Id)
+	if err != nil {
+		return user, err
+	}
+	rUser.Currency = user.Currency
+	if rUser.Currency != "" {
+		rate, err := GetRate(rUser.Currency)
+		if err != nil {
+			return balance.User{}, err
+		}
+		rUser.Balance = math.Round(rUser.Balance * rate * 1000) / 1000
+	}
+	return rUser, nil
 }
 
 func (s *BalanceService) IncreaseBalance(operation balance.Operation) (uint64, error) {
